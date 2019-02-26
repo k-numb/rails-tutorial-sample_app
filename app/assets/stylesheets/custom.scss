@@ -161,7 +161,7 @@ input {
 }
 
 .field_with_errors {
-  @extemd .has-error;
+  @extend .has-error;
   .form-control {
     color: $state-danger-text;
   }
