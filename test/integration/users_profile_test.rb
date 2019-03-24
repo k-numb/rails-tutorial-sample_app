@@ -1,10 +1,17 @@
 require 'test_helper'
 
-class UserProfileTest < ActionDispatch::IntegrationTest
+class UsersProfileTest < ActionDispatch::IntegrationTest
   include ApplicationHelper
 
   def setup
     @user = users(:michael)
+  end
+
+  test "count following and followers" do
+    log_in_as(@user)
+    get root_path
+    assert_select 'strong#following', text: @user.following.count.to_s
+    assert_select 'strong#followers', text: @user.followers.count.to_s
   end
 
   test "profile display" do
@@ -18,5 +25,7 @@ class UserProfileTest < ActionDispatch::IntegrationTest
     @user.microposts.paginate(page:1).each do |micropost|
       assert_match micropost.content, response.body
     end
+    assert_select 'strong#following', text: @user.following.count.to_s
+    assert_select 'strong#followers', text: @user.followers.count.to_s
   end
 end
